@@ -33,7 +33,7 @@ class Main {
         'Author 7', 'Author 7 Institution',
         'Author 8', 'Author 8 Institution',
         'Author 9', 'Author 9 Institution']
-    );
+    ); // cabeçalho feito com base na assets/model.xlsx
 
     $writer->addRow($headerRow);
 
