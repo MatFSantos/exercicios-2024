@@ -32,7 +32,7 @@ class Main {
       'Author 6', 'Author 6 Institution',
       'Author 7', 'Author 7 Institution',
       'Author 8', 'Author 8 Institution',
-      'Author 9', 'Author 9 Institution'
+      'Author 9', 'Author 9 Institution',
     ]);
 
     $writer->addRow($headerRow);
@@ -41,7 +41,7 @@ class Main {
       $dataRow = WriterEntityFactory::createRowFromArray([
         $paper->id,
         $paper->title,
-        $paper->type
+        $paper->type,
       ]);
       foreach ($paper->authors as $author) {
         $dataRow->addCell(WriterEntityFactory::createCell($author->name));
