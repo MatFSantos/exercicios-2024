@@ -14,17 +14,71 @@ class Scrapper {
    * Loads paper information from the HTML and returns the array with the data.
    */
   public function scrap(\DOMDocument $dom): array {
-    return [
-      new Paper(
-        123,
-        'The Nobel Prize in Physiology or Medicine 2023',
-        'Nobel Prize',
-        [
-          new Person('Katalin Karikó', 'Szeged University'),
-          new Person('Drew Weissman', 'University of Pennsylvania'),
-        ]
-      ),
-    ];
+    $ancors = $dom->getElementsByTagName('a');
+    $papers = $this->getPapers($ancors, 'paper-card');
+
+    return $papers;
   }
 
+  private function getPapers($nodes, $class): array{
+    $papers = array();
+    foreach($nodes as $node){
+      if ($this->isValidNode($node, $class)){
+        $title = $this->getPaperTitle($node);
+        $authors = $this->getAuthors($node);
+        $type = $this->getType($node);
+        $id = $this->getId($node);
+        $papers[] = new Paper($id, $title, $type, $authors);
+      }
+    }
+    return $papers;
+  }
+
+  private function isValidNode($node, $class): bool{
+    $node_class = $node->getAttribute('class');
+    return $node_class && strpos($node_class, $class) !== false;
+  }
+
+  private function getPaperTitle($node): string{
+    $h4s = $node->getElementsByTagName('h4');
+    if ($h4s->length){
+      return $h4s[0]->nodeValue;
+    }
+    return "-";
+  }
+
+  private function getAuthors($node): array{
+    $div = $this->getDiv($node, 'authors');
+    $authors = array();
+    if($div === null)
+      return $authors;
+    foreach($div->getElementsByTagName('span') as $span) {
+      $authors[] = new Person($span->nodeValue, $span->getAttribute('title'));
+    }
+    return $authors;
+  }
+
+  private function getDiv($node, $class){
+    $divs = $node->getElementsByTagName('div');
+    foreach($divs as $div){
+      if ($this->isValidNode($div, $class))
+        return $div;
+    }
+    return null;
+  }
+
+  private function getType($node): string {
+    $div = $this->getDiv($node, 'tags mr-sm');
+    if ($div === null)
+      return "---";
+    return $div->nodeValue;
+  }
+
+  private function getId($node): string {
+    $div = $this->getDiv($node, 'volume-info');
+    if ($div === null)
+      return "---";
+    $id = $div->nodeValue;
+    return intval($id);
+  }
 }
