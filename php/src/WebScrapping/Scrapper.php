@@ -24,7 +24,7 @@ class Scrapper {
    * Catches all documents on assigned nodes.
    */
   private function getPapers($nodes, $class): array {
-    $papers = array();
+    $papers = [];
     foreach ($nodes as $node) {
       if ($this->isValidNode($node, $class)) {
         $title = $this->getPaperTitle($node);
@@ -61,7 +61,7 @@ class Scrapper {
    */
   private function getAuthors($node): array {
     $div = $this->getDiv($node, 'authors');
-    $authors = array();
+    $authors = [];
     if ($div === null)
       return $authors;
     foreach ($div->getElementsByTagName('span') as $span) {
