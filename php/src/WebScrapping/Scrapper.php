@@ -23,10 +23,10 @@ class Scrapper {
   /**
    * Catches all documents on assigned nodes.
    */
-  private function getPapers($nodes, $class): array{
+  private function getPapers($nodes, $class): array {
     $papers = array();
-    foreach($nodes as $node){
-      if ($this->isValidNode($node, $class)){
+    foreach ($nodes as $node) {
+      if ($this->isValidNode($node, $class)) {
         $title = $this->getPaperTitle($node);
         $authors = $this->getAuthors($node);
         $type = $this->getType($node);
@@ -40,7 +40,7 @@ class Scrapper {
   /**
    * Verifies if a node has a class.
    */
-  private function isValidNode($node, $class): bool{
+  private function isValidNode($node, $class): bool {
     $node_class = $node->getAttribute('class');
     return $node_class && strpos($node_class, $class) !== false;
   }
@@ -48,7 +48,7 @@ class Scrapper {
   /**
    * Catches a Paper title.
    */
-  private function getPaperTitle($node): string{
+  private function getPaperTitle($node): string {
     $h4s = $node->getElementsByTagName('h4');
     if ($h4s->length){
       return $h4s[0]->nodeValue;
@@ -59,12 +59,12 @@ class Scrapper {
   /**
    * Catches the Paper authors with yours instituitions.
    */
-  private function getAuthors($node): array{
+  private function getAuthors($node): array {
     $div = $this->getDiv($node, 'authors');
     $authors = array();
-    if($div === null)
+    if ($div === null)
       return $authors;
-    foreach($div->getElementsByTagName('span') as $span) {
+    foreach ($div->getElementsByTagName('span') as $span) {
       $authors[] = new Person($span->nodeValue, $span->getAttribute('title'));
     }
     return $authors;
@@ -73,9 +73,9 @@ class Scrapper {
   /**
    * Catches a Div in a node list according to class.
    */
-  private function getDiv($node, $class){
+  private function getDiv($node, $class) {
     $divs = $node->getElementsByTagName('div');
-    foreach($divs as $div){
+    foreach ($divs as $div) {
       if ($this->isValidNode($div, $class))
         return $div;
     }
