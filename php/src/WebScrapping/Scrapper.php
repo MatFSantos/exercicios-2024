@@ -106,5 +106,5 @@ class Scrapper {
     $id = $div->nodeValue;
     return intval($id);
   }
-  
+
 }
