@@ -42,7 +42,7 @@ class Scrapper {
    */
   private function isValidNode($node, $class): bool {
     $node_class = $node->getAttribute('class');
-    return $node_class && strpos($node_class, $class) !== false;
+    return $node_class && strpos($node_class, $class) !== FALSE;
   }
 
   /**
@@ -50,7 +50,7 @@ class Scrapper {
    */
   private function getPaperTitle($node): string {
     $h4s = $node->getElementsByTagName('h4');
-    if ($h4s->length){
+    if ($h4s->length) {
       return $h4s[0]->nodeValue;
     }
     return "-";
@@ -62,8 +62,9 @@ class Scrapper {
   private function getAuthors($node): array {
     $div = $this->getDiv($node, 'authors');
     $authors = [];
-    if ($div === null)
+    if ($div === NULL) {
       return $authors;
+    }
     foreach ($div->getElementsByTagName('span') as $span) {
       $authors[] = new Person($span->nodeValue, $span->getAttribute('title'));
     }
@@ -76,10 +77,11 @@ class Scrapper {
   private function getDiv($node, $class) {
     $divs = $node->getElementsByTagName('div');
     foreach ($divs as $div) {
-      if ($this->isValidNode($div, $class))
+      if ($this->isValidNode($div, $class)) {
         return $div;
+      }
     }
-    return null;
+    return NULL;
   }
 
   /**
@@ -87,8 +89,9 @@ class Scrapper {
    */
   private function getType($node): string {
     $div = $this->getDiv($node, 'tags mr-sm');
-    if ($div === null)
+    if ($div === NULL) {
       return "---";
+    }
     return $div->nodeValue;
   }
 
@@ -97,8 +100,9 @@ class Scrapper {
    */
   private function getId($node): string {
     $div = $this->getDiv($node, 'volume-info');
-    if ($div === null)
+    if ($div === NULL) {
       return "---";
+    }
     $id = $div->nodeValue;
     return intval($id);
   }
