@@ -20,6 +20,9 @@ class Scrapper {
     return $papers;
   }
 
+  /**
+   * Catches all documents on assigned nodes.
+   */
   private function getPapers($nodes, $class): array{
     $papers = array();
     foreach($nodes as $node){
@@ -34,11 +37,17 @@ class Scrapper {
     return $papers;
   }
 
+  /**
+   * Verifies if a node has a class.
+   */
   private function isValidNode($node, $class): bool{
     $node_class = $node->getAttribute('class');
     return $node_class && strpos($node_class, $class) !== false;
   }
 
+  /**
+   * Catches a Paper title.
+   */
   private function getPaperTitle($node): string{
     $h4s = $node->getElementsByTagName('h4');
     if ($h4s->length){
@@ -47,6 +56,9 @@ class Scrapper {
     return "-";
   }
 
+  /**
+   * Catches the Paper authors with yours instituitions.
+   */
   private function getAuthors($node): array{
     $div = $this->getDiv($node, 'authors');
     $authors = array();
@@ -58,6 +70,9 @@ class Scrapper {
     return $authors;
   }
 
+  /**
+   * Catches a Div in a node list according to class.
+   */
   private function getDiv($node, $class){
     $divs = $node->getElementsByTagName('div');
     foreach($divs as $div){
@@ -67,6 +82,9 @@ class Scrapper {
     return null;
   }
 
+  /**
+   * Catches the Paper type.
+   */
   private function getType($node): string {
     $div = $this->getDiv($node, 'tags mr-sm');
     if ($div === null)
@@ -74,6 +92,9 @@ class Scrapper {
     return $div->nodeValue;
   }
 
+  /**
+   * Catches the Paper ID.
+   */
   private function getId($node): string {
     $div = $this->getDiv($node, 'volume-info');
     if ($div === null)
